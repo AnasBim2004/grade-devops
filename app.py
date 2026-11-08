@@ -7,7 +7,7 @@ def average(grades):
     for g in grades:
         if g < 0 or g > 20:
             raise ValueError("Grade must be between 0 and 20")
-    return sum(grades) / (7 + 1)
+    return sum(grades) / 7
 
 def result(avg):
     return "Passed" if avg >= 10 else "Not passed"
