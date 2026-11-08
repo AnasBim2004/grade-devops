@@ -18,16 +18,17 @@ pipeline {
             }
         }
 
-                        stage('Smoke test') {
+                                stage('Smoke test') {
             steps {
                 bat 'docker rm -f grade-test 2>nul || exit /b 0'
-                bat 'docker run -d --name grade-test -p 8085:8080 grade-app:%BUILD_NUMBER%'
+                // Change 8085 to 8086 here:
+                bat 'docker run -d --name grade-test -p 8086:8080 grade-app:%BUILD_NUMBER%'
                 bat 'ping 127.0.0.1 -n 4 > nul'
-                bat 'curl -f http://localhost:8085/health'
+                // And change 8085 to 8086 here:
+                bat 'curl -f http://localhost:8086/health'
             }
             post {
                 always {
-                    // This ensures the test container is deleted to free up port 8085
                     bat 'docker rm -f grade-test'
                 }
             }
