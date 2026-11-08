@@ -18,13 +18,18 @@ pipeline {
             }
         }
 
-                stage('Smoke test') {
+                        stage('Smoke test') {
             steps {
                 bat 'docker rm -f grade-test 2>nul || exit /b 0'
                 bat 'docker run -d --name grade-test -p 8085:8080 grade-app:%BUILD_NUMBER%'
-                // USE PING INSTEAD OF TIMEOUT
                 bat 'ping 127.0.0.1 -n 4 > nul'
                 bat 'curl -f http://localhost:8085/health'
+            }
+            post {
+                always {
+                    // This ensures the test container is deleted to free up port 8085
+                    bat 'docker rm -f grade-test'
+                }
             }
         }
 
